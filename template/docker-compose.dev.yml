@@ -1,0 +1,7 @@
+version: "3.8"
+services:
+  react:
+    command: ["npm", "start"]
+    environment:
+      - CHOKIDAR_USEPOLLING=true
+

@@ -1,0 +1,7 @@
+---
+title: ServerSideUp Spin React Template
+authors:
+  - Prabhjyot Singh (@ps-prabhjyotsingh)
+description: Spin template for initializing a production-ready React application with Docker support.
+repository: https://github.com/ps-prabhjyotsingh/spinup-react-template
+issues: https://github.com/ps-prabhjyotsingh/spinup-react-template/issues

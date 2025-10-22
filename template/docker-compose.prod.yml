@@ -1,0 +1,7 @@
+version: "3.8"
+services:
+  react:
+    command: ["npm", "run", "build"]
+    environment:
+      - NODE_ENV=production
+
