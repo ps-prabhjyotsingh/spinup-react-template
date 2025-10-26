@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+export SPIN_PROJECT_DIRECTORY=$(pwd)
 
 new() {
   echo "Initializing new React Spin project..."
