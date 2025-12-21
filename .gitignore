@@ -1,1 +1,5 @@
 .idea
+.spin.yml
+.vault-password
+.env.prod
+.env.staging
