@@ -1,6 +1,72 @@
 services:
-  react:
-    command: ["npm", "run", "build"]
+  frontend:
+    #image: ${IMAGE_NAME}:${TAG}
+    image: ${SPIN_IMAGE_DOCKERFILE}
+#    container_name: app-frontend
+#    restart: unless-stopped
+    networks:
+      #- app-network
+      - inbound
+    healthcheck:
+      test: [ "CMD-SHELL", "curl http://localhost/health || exit 1" ]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 30s  # Nginx startup time
     environment:
-      - NODE_ENV=production
+      NODE_ENV: production
+      #SSL_MODE: full
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    ports:
+      - "80"  # Internal container port
+    deploy:
+      replicas: 1
+      update_config:
+        failure_action: rollback
+        parallelism: 1
+        delay: 5s
+        order: start-first
+      rollback_config:
+        parallelism: 1
+        order: stop-first
+      restart_policy:
+        condition: any
+        delay: 10s
+        max_attempts: 10
+        window: 120s
+      labels:
+        - "traefik.enable=true"
+        - "traefik.http.routers.react.rule=Host(`${SPIN_APP_DOMAIN}`)"
+        - "traefik.http.routers.react.entrypoints=websecure"
+        - "traefik.http.routers.react.tls=true"
+        #        - "traefik.http.routers.php.tls.certresolver=letsencryptresolver"
+        - "traefik.http.services.react.loadbalancer.server.port=80"
+        - "traefik.http.services.react.loadbalancer.server.scheme=http"
+#         Health check
+#        - "traefik.http.services.react.loadbalancer.healthcheck.path=/health"
+#        - "traefik.http.services.react.loadbalancer.healthcheck.interval=30s"
+#        - "traefik.http.services.react.loadbalancer.healthcheck.timeout=5s"
+#        - "traefik.http.services.react.loadbalancer.healthcheck.scheme=http"
+
+#To enable phpmyadmin
+#  app-hexy1234:
+#    image: phpmyadmin:latest
+#    container_name: app-hexy1234
+#    restart: unless-stopped
+#    environment:
+#      - PMA_HOST=app-backend-db
+#    networks:
+#      - app-backend-network
+#      - app-network
+
+networks:
+#  app-network:
+#    driver: bridge
+#    name: app-network
+#  app-backend-network:
+#    external: true
+  inbound:
+    external: true
+
 
