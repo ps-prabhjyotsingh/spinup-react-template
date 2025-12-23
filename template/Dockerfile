@@ -13,7 +13,7 @@ RUN npm install --force --loglevel verbose
 # Copy source code and configuration files
 COPY . .
 
-RUN cp .env.prod .env
+RUN cp .env.production .env
 # Build the application
 RUN npm run build
 
